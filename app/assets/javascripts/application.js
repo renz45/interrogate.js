@@ -15,4 +15,5 @@
 //= require underscore
 //= require esprima
 //= require escodegen
+//= require estraversal
 //= require test
