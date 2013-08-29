@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="us">
+  <head>
+    <meta charset="utf-8">
+    <title>Demo page</title>
+    <script src="interrogate.js"></script>
+    <script src="../app/vendor/javascripts/esprima.js"></script>
+    <script src="../app/vendor/javascripts/estraversal.js"></script>
+    <script src="../app/vendor/javascripts/escodegen.js"></script>
+    <script src="../app/vendor/javascripts/underscore.js"></script>
+  </head>
+  <body>
+    <script>
+      interrogator = new Interrogate
+      code = "while(true){console.log('boom!')}"
+      interrogator.safeEval(code)
+
+
+      code = "var b = 'hello everyone!';"+
+      "var a = 123456;"+
+      "c = {one: 1, two: 2};"+
+      "var d = function(){"+
+      "  return 'hello';"+
+      "};"+
+      "arr = [1,2,3,4,5];"+
+      "for(i in arr){"+
+      "  console.log(b + ' - ' + arr[i]);"+
+      "};"
+
+      console.log(interrogator.getVars(code))
+    </script>
+  </body>
+</html>

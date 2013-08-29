@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+
+require_relative "../tasks/cli"
+Interrogate::CLI.start
