@@ -76,10 +76,16 @@ THE SOFTWARE.
         }
         return _results;
       };
-      eval("" + (escodegen.generate(parseTree)) + ";");
+      eval(this.guardLoops("" + (escodegen.generate(parseTree)) + ";"));
       return recordedVars;
     },
     safeEval: function(code, failureCallback, options) {
+      if (options == null) {
+        options = {};
+      }
+      return eval(this.guardLoops(code, failureCallback, options));
+    },
+    guardLoops: function(code, failureCallback, options) {
       var parseTree, tolerance, tryCatch;
 
       if (options == null) {
@@ -118,7 +124,7 @@ THE SOFTWARE.
           });
         }
       });
-      return eval(escodegen.generate(parseTree));
+      return escodegen.generate(parseTree);
     }
   };
 
