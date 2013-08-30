@@ -27,12 +27,8 @@ THE SOFTWARE.
 */
 
 (function() {
-  var Interrogate;
-
-  window.Interrogate = Interrogate = (function() {
-    function Interrogate() {}
-
-    Interrogate.prototype.getVars = function(code) {
+  window.Interrogate = {
+    getVars: function(code) {
       var bodyItems, interrogateContext, parseTree, recordedVars, variableNames;
 
       parseTree = esprima.parse(code);
@@ -82,9 +78,8 @@ THE SOFTWARE.
       };
       eval("" + (escodegen.generate(parseTree)) + ";");
       return recordedVars;
-    };
-
-    Interrogate.prototype.safeEval = function(code, failureCallback, options) {
+    },
+    safeEval: function(code, failureCallback, options) {
       var parseTree, tolerance, tryCatch;
 
       if (options == null) {
@@ -92,7 +87,7 @@ THE SOFTWARE.
       }
       parseTree = esprima.parse(code);
       tolerance = options.tolerance || 100;
-      tryCatch = "      try {      }catch(e){        if(failureCallback){          failureCallback(e)        }else{          console.log(e)        }      }    ";
+      tryCatch = "      try {      }catch(e){        if(failureCallback){          failureCallback(e)        }else{          throw e        }      }    ";
       estraverse.traverse(parseTree, {
         countId: 0,
         leave: function(node) {
@@ -124,10 +119,7 @@ THE SOFTWARE.
         }
       });
       return eval(escodegen.generate(parseTree));
-    };
-
-    return Interrogate;
-
-  })();
+    }
+  };
 
 }).call(this);

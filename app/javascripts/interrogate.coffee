@@ -1,4 +1,4 @@
-window.Interrogate = class Interrogate
+window.Interrogate =
   getVars: (code)->
     parseTree = esprima.parse(code)
     # expressionStatement > left > name
@@ -53,7 +53,7 @@ window.Interrogate = class Interrogate
         if(failureCallback){
           failureCallback(e)
         }else{
-          console.log(e)
+          throw e
         }
       }
     "
