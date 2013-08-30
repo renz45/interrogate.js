@@ -34,11 +34,14 @@ window.Interrogate =
         if typeof(evaledValue) != 'undefined'
           recordedVars[vName] = evaledValue
 
-    eval("#{escodegen.generate(parseTree)};")
+    eval(@guardLoops("#{escodegen.generate(parseTree)};"))
 
     recordedVars
 
   safeEval: (code, failureCallback, options={})->
+    eval(@guardLoops(code, failureCallback, options))
+
+  guardLoops: (code, failureCallback, options={})->
     parseTree = esprima.parse(code)
     # Set how many times a loop is allowed to loop before being considered infinite
     tolerance = options.tolerance || 100
@@ -96,4 +99,4 @@ window.Interrogate =
           # increment the @countId so the _tryCount_ variables are always unique
           @countId += 1
 
-    eval(escodegen.generate(parseTree))
+    escodegen.generate(parseTree)
