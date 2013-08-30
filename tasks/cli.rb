@@ -10,7 +10,7 @@ module Interrogate
   class CLI < Thor
     include Thor::Actions
 
-    desc "build", "Build the cs_console with various recipes"
+    desc "build", "Build the interrogate.js with various recipes"
     method_option :build_type, default: :all, aliases: '-t', desc: 'Specify a build type. Use the -l option to list possible builds.'
     method_option :list_builds, aliases: '-l', desc: "List Build types and their descriptions"
     def build
@@ -23,9 +23,9 @@ module Interrogate
         puts "Compiling files..."
         project.invoke
         puts "Adding license to compiled files..."
-        add_license_to_files('./compiled/cs_console.css', './compiled/cs_console.js')
+        add_license_to_files('./compiled/interrogate.js')
         puts "Adding version to compiled files..."
-        add_version_to_files('./compiled/cs_console.css', './compiled/cs_console.js')
+        add_version_to_files('./compiled/interrogate.js')
         puts 'Cleaning up temporary files...'
         clean_up_temp_files
         puts 'Finished! Compiled files can be found in /compiled'
@@ -69,7 +69,7 @@ module Interrogate
       file_paths.each do |file_path|
         compiled_file = File.expand_path(file_path)
         compiled_fileContent = File.read(compiled_file)
-        File.write(compiled_file, "/*\nCS Console Version: #{version_content}\n*/\n\n#{compiled_fileContent}")
+        File.write(compiled_file, "/*\nInterrogate.js Version: #{version_content}\n*/\n\n#{compiled_fileContent}")
       end
     end
   end

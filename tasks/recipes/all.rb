@@ -8,6 +8,10 @@ module Interrogate
         TEXT
       end
 
+      def self.build_options
+        nil
+      end
+
       def self.build(build_options=nil)
         Proc.new do
           output 'compiled'
