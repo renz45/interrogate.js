@@ -49,17 +49,26 @@ window.Interrogate =
     # setup try catch code which we'll turn into parse trees on demand
     # I think it's more efficient to do that then try to clone the parsetree
     # everytime you need a copy of it
-    tryCatch = "
-      try {
+    getTryCatchTree = ()->
+      tryCatch = "
+        try {
 
-      }catch(e){
-        if(failureCallback){
-          failureCallback(e)
-        }else{
-          throw e
+        }catch(e){
+          var failureCallback;
+          if(failureCallback){
+            failureCallback(e)
+          }else{
+            throw e
+          }
         }
-      }
-    "
+      "
+      tryCatchTree = esprima.parse(tryCatch)
+      # insert the callback function passed into the guardloops method
+      if failureCallback
+        tryCatchTree.body[0].handlers[0].body.body[0] = esprima.parse(failureCallback.toString()).body[0]
+
+      tryCatchTree
+
     # Traverse through the parse tree looking for loops
     estraverse.traverse parseTree,
       countId: 0
@@ -90,7 +99,7 @@ window.Interrogate =
           node.body.splice(index, 1)
 
           # turn the trycatch code into a parse tree and inject the loop code into the try block
-          tryCatchNode = esprima.parse(tryCatch)
+          tryCatchNode = getTryCatchTree()
           tryCatchNode.body[0].block.body.push(errorThrowVariableNode,statement)
 
           # splice the trycatch code back into the original code in the correct position
